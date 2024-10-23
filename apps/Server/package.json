@@ -8,5 +8,10 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": ""
+  "description": "",
+  "dependencies": {
+    "colyseus": "^0.15.17",
+    "cors": "^2.8.5",
+    "kafkajs": "^2.2.4"
+  }
 }
