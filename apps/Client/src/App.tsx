@@ -1,13 +1,14 @@
-import Test from "./components/test"
+import { Routes, Route } from 'react-router-dom'
+import { Dashboard } from './pages/dashboard'
 
 
 function App() {
 
   return (
     <>
-      <div>
-        <Test />
-      </div>
+      <Routes>
+        <Route path='/' element={<Dashboard />} />
+      </Routes>
     </>
   )
 }
