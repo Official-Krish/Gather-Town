@@ -2,10 +2,11 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 import { Router } from "express";
-import { prisma } from "../db";
+import { prisma } from "../utils/db";
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { LoginSchema, SignupSchema } from '../types/schema';
+import { LoginSchema, SignupSchema, UpdateMetaDataSchema } from '../types/schema';
+import { userMiddleware } from '../utils/middleware/user';
 
 export const userRouter = Router();
 const JWT_SECRET = process.env.JWT_SECRET || "secret";
@@ -42,7 +43,8 @@ userRouter.post("/signup", async (req, res) => {
 
             const token = jwt.sign(
                 {
-                    email: user.username,
+                    userId: user.id,
+                    role: user.role
                 },
                 JWT_SECRET
             );
@@ -82,7 +84,7 @@ userRouter.post("/signin", async (req, res) => {
             } else {
                 const token = jwt.sign(
                     {
-                        email: parsedData.data.username,
+                        userId: user.id,
                         role: user.role,
                     },
                     JWT_SECRET
@@ -96,3 +98,53 @@ userRouter.post("/signin", async (req, res) => {
         }
     }
 });
+
+
+userRouter.post("/metadata", userMiddleware, async (req, res) => {
+    const parsedData = UpdateMetaDataSchema.safeParse(req.body);
+    if (!parsedData.success) {
+        res.status(400).json({ error: "Invalid data" });
+        return;
+    }
+    try{
+        await prisma.user.update({
+            where: {
+                id : req.userId
+            },
+            data : {
+                avatarId : parsedData.data.avatarId,
+            }
+        });
+        res.status(200).json({ msg: "AvatarId updated successfully" });
+    } catch(error){
+        res.status(500).json({ msg: "Internal server error" });
+    }
+})
+
+userRouter.get("/metadata/bulk", async (req, res) => {
+    const userIdString = (req.query.ids ?? "[]") as string;
+    const userIds = (userIdString)?.slice(1, userIdString.length - 2).split(',');
+
+    try{ 
+        const metaData = await prisma.user.findMany({
+            where: {
+                id: {
+                    in: userIds
+                }
+            },
+            select: {
+                id: true,
+                avatar: true
+            }
+        });
+
+        res.json({
+            avatars : metaData.map(m => ({
+                userId: m.id,
+                avatarId: m.avatar?.imageUrl
+            }))
+        })
+    } catch(error){
+        res.status(500).json({ msg: "Internal server error" });
+    }
+})
