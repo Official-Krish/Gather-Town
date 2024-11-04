@@ -10,78 +10,89 @@ import { LoginSchema, SignupSchema } from '../types/schema';
 export const userRouter = Router();
 const JWT_SECRET = process.env.JWT_SECRET || "secret";
 
-//@ts-ignore
 userRouter.post("/signup", async (req, res) => {
     const body = req.body;
     const parsedData = SignupSchema.safeParse(body);
 
     if (!parsedData.success) {
-        return res.status(400).json({ error: "Invalid data" });
+        res.status(400).json({ error: "Invalid data" });
+        return;
     }
 
     const userExist = await prisma.user.findFirst({
         where: {
-            email: parsedData.data.email
+            username: parsedData.data.username,
         }
     });
 
     if (userExist) {
-        return res.status(400).json({ msg: "User already exists" });
+        res.status(400).json({ msg: "User already exists" });
+        return;
     } else {
-        const hashedPassword = await bcrypt.hash(parsedData.data.password, 10);
-        const user = await prisma.user.create({
-            data: {
-                name: parsedData.data.name,  
-                email: parsedData.data.email,
-                password: hashedPassword
-            }
-        });
+        try{
+            const hashedPassword = await bcrypt.hash(parsedData.data.password, 10);
+            const user = await prisma.user.create({
+                data: {
+                    name: parsedData.data.name,  
+                    username: parsedData.data.username,
+                    password: hashedPassword,
+                    role: parsedData.data.role,
+                }
+            });
 
-        const token = jwt.sign(
-            {
-                email: user.email,
-            },
-            JWT_SECRET,
-            { expiresIn: '1h' }
-        );
+            const token = jwt.sign(
+                {
+                    email: user.username,
+                },
+                JWT_SECRET
+            );
 
-        res.cookie('token', token);
-        return res.status(200).json({ msg: "User created successfully" , userId : user.id});
+            res.cookie('token', token);
+            res.status(200).json({ msg: "User created successfully" , userId : user.id});
+        } catch(error){
+            res.status(500).json({ msg: "Internal server error" });
+        }
     }
 });
 
-//@ts-ignore
-userRouter.post("/login", async (req, res) => {
+userRouter.post("/signin", async (req, res) => {
     const body = req.body;
     const parsedData = LoginSchema.safeParse(body);
 
     if (!parsedData.success) {
-        return res.status(400).json({ error: "Invalid data" });
+        res.status(400).json({ error: "Invalid data" });
+        return;
     }
 
     const user = await prisma.user.findFirst({
         where: {
-            email: parsedData.data.email,
+            username: parsedData.data.username,
         }
     });
 
     if (!user) {
-        return res.status(400).json({ msg: "Invalid credentials" });
+        res.status(400).json({ msg: "Invalid credentials" });
+        return;
     } else {
-        const isPasswordValid = await bcrypt.compare(parsedData.data.password, user.password);
-        if (!isPasswordValid) {
-            return res.status(400).json({ msg: "Invalid credentials" });
-        } else {
-            const token = jwt.sign(
-                {
-                    email: parsedData.data.email,
-                },
-                JWT_SECRET,
-                { expiresIn: '1h' }
-            );
+        try{
+            const isPasswordValid = await bcrypt.compare(parsedData.data.password, user.password);
+            if (!isPasswordValid) {
+                res.status(400).json({ msg: "Invalid credentials" });
+                return;
+            } else {
+                const token = jwt.sign(
+                    {
+                        email: parsedData.data.username,
+                        role: user.role,
+                    },
+                    JWT_SECRET
+                );
 
-            res.cookie('token', token);
-            return res.status(200).json({ msg : "login successful" , name : user.name, userId : user.id});
+                res.cookie('token', token);
+                res.status(200).json({ msg : "login successful" , token : token , userId : user.id});
+            }
+        }catch(error){
+            res.status(500).json({ msg: "Internal server error" });
         }
     }
 });

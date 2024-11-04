@@ -14,11 +14,60 @@ datasource db {
 }
 
 
-model user {
-  id        String   @id @default(cuid())
-  email     String   @unique
+model User {
+  id       String  @id @unique @default(cuid())
+  username String  @unique
+  name     String?
+  password String  @unique
+  avatarId String?
+  role     Role
+}
+
+model Space {
+  id        String  @id @unique @default(cuid())
   name      String
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  width     Int
+  height    Int?
+  thumbnail String?
+}
+
+model spaceElements {
+  id        String @id @unique @default(cuid())
+  elementId String
+  spaceId   String
+  x         Int
+  y         Int
+}
+
+model Element {
+  id       String @id @unique @default(cuid())
+  width    Int
+  height   Int
+  imageUrl String
+}
+
+model Map {
+  id     String  @id @unique @default(cuid())
+  width  Int
+  height Int
+  name   String
+}
+
+model mapElements {
+  id        String  @id @unique @default(cuid())
+  mapId     String
+  elementId String?
+  x         Int?
+  y         Int?
+}
+
+model Avatar {
+  id       String  @id @unique @default(cuid())
+  imageUrl String?
+  name     String?
+}
+
+enum Role {
+  Admin
+  User
 }
