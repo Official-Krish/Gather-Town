@@ -7,7 +7,7 @@ import { userRouter } from './Routes/user';
 import cookieParser from 'cookie-parser';
 import { SpaceRouter } from './Routes/spaces';
 import { AdminRouter } from './Routes/admin';
-import { prisma } from './utils/db';
+import { getRouter } from './Routes/get';
 
 const app = express();
 app.use(express.json());
@@ -30,31 +30,7 @@ app.listen(3000, () => {
     console.log('Server started on http://localhost:3000');
 });
 
-
-app.get("/elements", async (req, res) => {
-    const elements = await prisma.element.findMany();
-    res.json({ 
-        elements : elements.map(e => ({
-            id: e.id,
-            imageUrl: e.imageUrl,
-            width: e.width,
-            height: e.height,
-            static: e.static
-        }))
-    });
-});
-
-app.get("/avatars", async (req, res) => {
-    const avatars = await prisma.avatar.findMany();
-    res.json({ 
-        avatars : avatars.map(a => ({
-            id: a.id,
-            name: a.name,
-            imageUrl: a.imageUrl
-        })) 
-    });
-});
-
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/spaces", SpaceRouter);
 app.use("/api/v1/admin", AdminRouter);
+app.use("/api/v1", getRouter);

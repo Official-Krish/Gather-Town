@@ -125,6 +125,12 @@ SpaceRouter.post("/element", userMiddleware , async (req, res) => {
         }
     });
 
+
+    if(req.body.x < 0 || req.body.y < 0 || req.body.x > space?.width! || req.body.y > space?.height!) {
+        res.status(400).json({message: "Point is outside of the boundary"});
+        return;
+    }
+
     if(!space){
         res.status(404).json({msg: "Space not found"})
         return

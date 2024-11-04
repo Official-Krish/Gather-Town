@@ -5,7 +5,9 @@ import { prisma } from "../utils/db";
 
 export const AdminRouter = Router();
 
-AdminRouter.post("/element", adminMiddleware,async (req, res) => {
+AdminRouter.use(adminMiddleware);
+
+AdminRouter.post("/element", async (req, res) => {
     const parsedData = CreateElementSchema.safeParse(req.body);
     if (!parsedData.success) {
         res.status(400).json({ error: "Invalid data" });
