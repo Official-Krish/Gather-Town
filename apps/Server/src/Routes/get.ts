@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { prisma } from "../utils/db";
+import client from "@repo/db/client";
 
 export const getRouter = Router();
 
 getRouter.get("/elements", async (req, res) => {
-    const elements = await prisma.element.findMany();
+    const elements = await client.element.findMany();
     res.json({ 
         elements : elements.map(e => ({
             id: e.id,
@@ -17,7 +17,7 @@ getRouter.get("/elements", async (req, res) => {
 });
 
 getRouter.get("/avatars", async (req, res) => {
-    const avatars = await prisma.avatar.findMany();
+    const avatars = await client.avatar.findMany();
     res.json({ 
         avatars : avatars.map(a => ({
             id: a.id,

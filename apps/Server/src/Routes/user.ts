@@ -2,11 +2,11 @@ import * as dotenv from 'dotenv';
 dotenv.config();
 
 import { Router } from "express";
-import { prisma } from "../utils/db";
-import bcrypt from 'bcrypt';
+import {hash, compare} from "../scrypt";
 import jwt from 'jsonwebtoken';
 import { LoginSchema, SignupSchema, UpdateMetaDataSchema } from '../types/schema';
 import { userMiddleware } from '../utils/middleware/user';
+import client from "@repo/db/client";
 
 export const userRouter = Router();
 const JWT_SECRET = process.env.JWT_SECRET || "secret";
@@ -20,7 +20,7 @@ userRouter.post("/signup", async (req, res) => {
         return;
     }
 
-    const userExist = await prisma.user.findFirst({
+    const userExist = await client.user.findFirst({
         where: {
             username: parsedData.data.username,
         }
@@ -31,8 +31,8 @@ userRouter.post("/signup", async (req, res) => {
         return;
     } else {
         try{
-            const hashedPassword = await bcrypt.hash(parsedData.data.password, 10);
-            const user = await prisma.user.create({
+            const hashedPassword = await hash(parsedData.data.password);
+            const user = await client.user.create({
                 data: {
                     name: parsedData.data.name,  
                     username: parsedData.data.username,
@@ -66,7 +66,7 @@ userRouter.post("/signin", async (req, res) => {
         return;
     }
 
-    const user = await prisma.user.findFirst({
+    const user = await client.user.findFirst({
         where: {
             username: parsedData.data.username,
         }
@@ -77,7 +77,7 @@ userRouter.post("/signin", async (req, res) => {
         return;
     } else {
         try{
-            const isPasswordValid = await bcrypt.compare(parsedData.data.password, user.password);
+            const isPasswordValid = await compare(parsedData.data.password, user.password);
             if (!isPasswordValid) {
                 res.status(400).json({ msg: "Invalid credentials" });
                 return;
@@ -107,7 +107,7 @@ userRouter.post("/metadata", userMiddleware, async (req, res) => {
         return;
     }
     try{
-        await prisma.user.update({
+        await client.user.update({
             where: {
                 id : req.userId
             },
@@ -126,7 +126,7 @@ userRouter.get("/metadata/bulk", async (req, res) => {
     const userIds = (userIdString)?.slice(1, userIdString.length - 2).split(',');
 
     try{ 
-        const metaData = await prisma.user.findMany({
+        const metaData = await client.user.findMany({
             where: {
                 id: {
                     in: userIds

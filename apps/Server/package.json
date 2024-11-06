@@ -4,16 +4,16 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc -b",
-    "dev": "tsc -b && node dist/index.js",
-    "start": "node dist/index.js"
+    "build": "npx esbuild src/index.ts --bundle --outfile=dist/index.js --platform=node --tsconfig=tsconfig.json",
+    "start": "node dist/index.js",
+    "dev": "npm run build && npm run start"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
-    "bcrypt": "^5.1.1",
+    "@repo/db": "*",
     "colyseus": "^0.15.17",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { AddElementSchema, CreateElementSchema, CreateSpaceSchema, deleteElementSchema } from "../types/schema";
-import { prisma } from "../utils/db";
+import client from "@repo/db/client";
 import { userMiddleware } from "../utils/middleware/user";
 
 export const SpaceRouter = Router(); 
@@ -13,7 +13,7 @@ SpaceRouter.post("/", userMiddleware,async (req, res) => {
     }
 
     if(!parsedData.data.mapId){
-        const space =await prisma.space.create({
+        const space =await client.space.create({
             data: {
                 name: parsedData.data.name,
                 width: parsedData.data.dimensions.split("x")[0] as unknown as number,
@@ -24,7 +24,7 @@ SpaceRouter.post("/", userMiddleware,async (req, res) => {
         res.json({msg: "Space created successfully", spaceId: space.id});
     }
     else { 
-        const map = await prisma.map.findFirst({
+        const map = await client.map.findFirst({
             where: {
                 id: parsedData.data.mapId
             }, select: {
@@ -37,8 +37,8 @@ SpaceRouter.post("/", userMiddleware,async (req, res) => {
             res.status(400).json({message: "Map not found"})
             return
         }
-        let space = await prisma.$transaction(async () => {
-            const space = await prisma.space.create({
+        let space = await client.$transaction(async () => {
+            const space = await client.space.create({
                 data: {
                     name: parsedData.data.name,
                     width: map.width,
@@ -47,7 +47,7 @@ SpaceRouter.post("/", userMiddleware,async (req, res) => {
                 }
             });
     
-            await prisma.spaceElements.createMany({
+            await client.spaceElements.createMany({
                 data: map.mapElements.map(e => ({
                     spaceId: space.id,
                     elementId: e.elementId,
@@ -64,7 +64,7 @@ SpaceRouter.post("/", userMiddleware,async (req, res) => {
 });
 
 SpaceRouter.delete("/:spaceId", async (req, res) => {
-    const space = await prisma.space.findUnique({
+    const space = await client.space.findUnique({
         where: {
             id: req.params.spaceId
         },
@@ -82,7 +82,7 @@ SpaceRouter.delete("/:spaceId", async (req, res) => {
         res.status(401).json({msg: "Unauthorized"})
         return
     }
-    await prisma.space.delete({
+    await client.space.delete({
         where: {
             id: req.params.spaceId
         }
@@ -93,7 +93,7 @@ SpaceRouter.delete("/:spaceId", async (req, res) => {
 
 
 SpaceRouter.get("/all", userMiddleware, async (req, res) => {
-    const spaces = await prisma.space.findMany({
+    const spaces = await client.space.findMany({
         where: {
             creatorId: req.userId
         }
@@ -114,7 +114,7 @@ SpaceRouter.post("/element", userMiddleware , async (req, res) => {
         res.status(400).json({ error: "Invalid data" });
         return;
     }
-    const space = await prisma.space.findUnique({
+    const space = await client.space.findUnique({
         where: {
             id: parsedData.data.spaceId,
             creatorId: req.userId
@@ -135,7 +135,7 @@ SpaceRouter.post("/element", userMiddleware , async (req, res) => {
         res.status(404).json({msg: "Space not found"})
         return
     }
-    const element = await prisma.spaceElements.create({
+    const element = await client.spaceElements.create({
         data: {
             spaceId: parsedData.data.spaceId,
             elementId: parsedData.data.elementId,
@@ -153,7 +153,7 @@ SpaceRouter.delete("/element", userMiddleware, async (req, res) => {
         res.status(400).json({ error: "Invalid data" });
         return;
     }
-    const spaceElement = await prisma.spaceElements.findFirst({
+    const spaceElement = await client.spaceElements.findFirst({
         where: {
             id: parsedData.data.id
         }, 
@@ -165,7 +165,7 @@ SpaceRouter.delete("/element", userMiddleware, async (req, res) => {
         res.status(403).json({message: "Unauthorized"})
         return
     }
-    await prisma.spaceElements.delete({
+    await client.spaceElements.delete({
         where: {
             id: parsedData.data.id
         }
@@ -174,7 +174,7 @@ SpaceRouter.delete("/element", userMiddleware, async (req, res) => {
 });
 
 SpaceRouter.get("/:spaceId", async (req, res) => {
-    const space = await prisma.space.findUnique({
+    const space = await client.space.findUnique({
         where: {
             id: req.params.spaceId
         },

@@ -1,1 +1,1 @@
-{"root":["./src/index.ts","./src/routes/admin.ts","./src/routes/get.ts","./src/routes/spaces.ts","./src/routes/user.ts","./src/types/schema.ts","./src/utils/queue.ts","./src/utils/room.ts","./src/utils/db/index.ts","./src/utils/middleware/admin.ts","./src/utils/middleware/user.ts"],"version":"5.6.3"}
+{"root":["./src/index.ts","./src/routes/admin.ts","./src/routes/get.ts","./src/routes/spaces.ts","./src/routes/user.ts","./src/types/schema.ts","./src/utils/queue.ts","./src/utils/room.ts","./src/utils/middleware/admin.ts","./src/utils/middleware/user.ts"],"version":"5.6.3"}

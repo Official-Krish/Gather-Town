@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { adminMiddleware } from "../utils/middleware/admin";
-import { AddElementSchema, createAvatarSchema, CreateElementSchema, createMapSchema, UpdateElementSchema } from "../types/schema";
-import { prisma } from "../utils/db";
+import { createAvatarSchema, CreateElementSchema, createMapSchema, UpdateElementSchema } from "../types/schema";
+import client from "@repo/db/client";
 
 export const AdminRouter = Router();
 
@@ -14,7 +14,7 @@ AdminRouter.post("/element", async (req, res) => {
         return;
     }
 
-    const element = await prisma.element.create({
+    const element = await client.element.create({
         data: {
             imageUrl: parsedData.data.imageUrl,
             width: parsedData.data.width,
@@ -32,7 +32,7 @@ AdminRouter.put("/element/:elementId", (req, res) => {
         return;
     }
 
-    prisma.element.update({
+    client.element.update({
         where: {
             id: req.params.elementId
         },
@@ -49,7 +49,7 @@ AdminRouter.post("/avatar", async (req, res) => {
         res.status(400).json({ error: "Invalid data" });
         return;
     }
-    const avatar = await prisma.avatar.create({
+    const avatar = await client.avatar.create({
         data: {
             name: parsedData.data.name,
             imageUrl: parsedData.data.imageUrl
@@ -65,7 +65,7 @@ AdminRouter.post("/map", async (req, res) => {
         return;
     }
 
-    const map = await prisma.map.create({
+    const map = await client.map.create({
         data: {
             name: parsedData.data.name,
             thumbnail: parsedData.data.thumbnail,
