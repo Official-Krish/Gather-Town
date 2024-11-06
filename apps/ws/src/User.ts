@@ -1,7 +1,7 @@
 import { JwtPayload } from "jsonwebtoken";
 import jwt from "jsonwebtoken";
 import { WebSocket } from "ws";
-import client from "@repo/db/src"
+import client from "@repo/db/client";
 import { RoomManager } from "./RoomManager";
 
 function getRandomString(length: number) {
