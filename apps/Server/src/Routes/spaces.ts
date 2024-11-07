@@ -5,7 +5,7 @@ import { userMiddleware } from "../utils/middleware/user";
 
 export const SpaceRouter = Router(); 
 
-SpaceRouter.post("/", userMiddleware,async (req, res) => {
+SpaceRouter.post("/", userMiddleware, async (req, res) => {
     const parsedData = CreateSpaceSchema.safeParse(req.body);
     if (!parsedData.success) {
         res.status(400).json({ error: "Invalid data" });
@@ -13,11 +13,11 @@ SpaceRouter.post("/", userMiddleware,async (req, res) => {
     }
 
     if(!parsedData.data.mapId){
-        const space =await client.space.create({
+        const space = await client.space.create({
             data: {
                 name: parsedData.data.name,
-                width: parsedData.data.dimensions.split("x")[0] as unknown as number,
-                height: parsedData.data.dimensions.split("x")[1] as unknown as number,
+                width: parseInt(parsedData.data.dimensions.split("x")[0]),
+                height: parseInt(parsedData.data.dimensions.split("x")[1]),
                 creatorId: req.userId as string,
             }
         });
@@ -63,7 +63,34 @@ SpaceRouter.post("/", userMiddleware,async (req, res) => {
     }
 });
 
-SpaceRouter.delete("/:spaceId", async (req, res) => {
+SpaceRouter.delete("/element", userMiddleware, async (req, res) => {
+    console.log("here")
+    const parsedData = deleteElementSchema.safeParse(req.body);
+    if (!parsedData.success) {
+        res.status(400).json({ error: "Invalid data" });
+        return;
+    }
+    const spaceElement = await client.spaceElements.findFirst({
+        where: {
+            id: parsedData.data.id
+        }, 
+        include: {
+            space: true
+        }
+    })
+    if (!spaceElement?.space.creatorId || spaceElement.space.creatorId !== req.userId) {
+        res.status(403).json({message: "Unauthorized"})
+        return
+    }
+    await client.spaceElements.delete({
+        where: {
+            id: parsedData.data.id
+        }
+    })
+    res.json({message: "Element deleted"})
+});
+
+SpaceRouter.delete("/:spaceId", userMiddleware, async (req, res) => {
     const space = await client.space.findUnique({
         where: {
             id: req.params.spaceId
@@ -78,7 +105,7 @@ SpaceRouter.delete("/:spaceId", async (req, res) => {
         return
     }
 
-    if (space?.creatorId !== req.userId) {
+    if (space.creatorId !== req.userId) {
         res.status(401).json({msg: "Unauthorized"})
         return
     }
@@ -147,31 +174,6 @@ SpaceRouter.post("/element", userMiddleware , async (req, res) => {
     res.json({msg: "Element added successfully", elementId: element.id});
 });
 
-SpaceRouter.delete("/element", userMiddleware, async (req, res) => {
-    const parsedData = deleteElementSchema.safeParse(req.body);
-    if (!parsedData.success) {
-        res.status(400).json({ error: "Invalid data" });
-        return;
-    }
-    const spaceElement = await client.spaceElements.findFirst({
-        where: {
-            id: parsedData.data.id
-        }, 
-        include: {
-            space: true
-        }
-    })
-    if (!spaceElement?.space.creatorId || spaceElement.space.creatorId !== req.userId) {
-        res.status(403).json({message: "Unauthorized"})
-        return
-    }
-    await client.spaceElements.delete({
-        where: {
-            id: parsedData.data.id
-        }
-    })
-    res.json({message: "Element deleted"})
-});
 
 SpaceRouter.get("/:spaceId", async (req, res) => {
     const space = await client.space.findUnique({

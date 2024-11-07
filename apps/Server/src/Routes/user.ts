@@ -99,32 +99,9 @@ userRouter.post("/signin", async (req, res) => {
     }
 });
 
-
-userRouter.post("/metadata", userMiddleware, async (req, res) => {
-    const parsedData = UpdateMetaDataSchema.safeParse(req.body);
-    if (!parsedData.success) {
-        res.status(400).json({ error: "Invalid data" });
-        return;
-    }
-    try{
-        await client.user.update({
-            where: {
-                id : req.userId
-            },
-            data : {
-                avatarId : parsedData.data.avatarId,
-            }
-        });
-        res.status(200).json({ msg: "AvatarId updated successfully" });
-    } catch(error){
-        res.status(500).json({ msg: "Internal server error" });
-    }
-})
-
 userRouter.get("/metadata/bulk", async (req, res) => {
     const userIdString = (req.query.ids ?? "[]") as string;
-    const userIds = (userIdString)?.slice(1, userIdString.length - 2).split(',');
-
+    const userIds = (userIdString).slice(1, userIdString?.length - 1).split(",");
     try{ 
         const metaData = await client.user.findMany({
             where: {
@@ -144,6 +121,27 @@ userRouter.get("/metadata/bulk", async (req, res) => {
                 avatarId: m.avatar?.imageUrl
             }))
         })
+    } catch(error){
+        res.status(500).json({ msg: "Internal server error" });
+    }
+})
+
+userRouter.post("/metadata", userMiddleware, async (req, res) => {
+    const parsedData = UpdateMetaDataSchema.safeParse(req.body);
+    if (!parsedData.success) {
+        res.status(400).json({ error: "Invalid data" });
+        return;
+    }
+    try{
+        await client.user.update({
+            where: {
+                id : req.userId
+            },
+            data : {
+                avatarId : parsedData.data.avatarId,
+            }
+        });
+        res.status(200).json({ msg: "AvatarId updated successfully" });
     } catch(error){
         res.status(500).json({ msg: "Internal server error" });
     }
