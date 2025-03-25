@@ -4,7 +4,7 @@ dotenv.config();
 import { Router } from "express";
 import {hash, compare} from "../scrypt";
 import jwt from 'jsonwebtoken';
-import { LoginSchema, SignupSchema, UpdateMetaDataSchema } from '../types/schema';
+import { LoginSchema, SignupSchema, UpdateAvatar, UpdateMetaDataSchema,  } from '../types/schema';
 import { userMiddleware } from '../utils/middleware/user';
 import client from "@repo/db/client";
 
@@ -126,8 +126,8 @@ userRouter.get("/metadata/bulk", async (req, res) => {
     }
 })
 
-userRouter.post("/metadata", userMiddleware, async (req, res) => {
-    const parsedData = UpdateMetaDataSchema.safeParse(req.body);
+userRouter.post("/avatar", userMiddleware, async (req, res) => {
+    const parsedData = UpdateAvatar.safeParse(req.body);
     if (!parsedData.success) {
         res.status(400).json({ error: "Invalid data" });
         return;
@@ -146,3 +146,76 @@ userRouter.post("/metadata", userMiddleware, async (req, res) => {
         res.status(500).json({ msg: "Internal server error" });
     }
 })
+
+userRouter.get("/metadata", userMiddleware, async (req, res) => {
+    const user = await client.user.findUnique({
+      where: {
+        id: req.userId,
+      },
+    });
+  
+    if (!user) {
+      res.status(404).json({ message: "User not found 2" });
+      return;
+    }
+  
+    const avatar = await client.avatar.findFirst({
+      where: { id: user.avatarId || ""},
+    });
+    console.log("avatar", avatar);
+  
+    res.json({
+      user,
+      avatar,
+    });
+});
+
+userRouter.post("/:UserId", userMiddleware, async (req, res) => {
+    const user = await client.user.findUnique({
+      where: {
+        id: req.params.UserId,
+      },
+    });
+    console.log("user", user);
+  
+    if (!user) {
+      res.status(404).json({ message: "User not found 1" });
+      return;
+    }
+  
+    res.json({
+      user,
+    });
+});
+  
+
+userRouter.post("/metadata", userMiddleware, async (req, res) => {
+    const parsedData = UpdateMetaDataSchema.safeParse(req.body);
+    if (!parsedData.success) {
+      console.log("parsed data incorrect");
+      res.status(400).json({ message: "Validation failed" });
+      return;
+    }
+    try {
+      const user = await client.user.update({
+        where: {
+          id: req.userId,
+        },
+        data: {
+          avatarId: parsedData.data.avatarId,
+          name: parsedData.data.name,
+        },
+        select: {
+          username: true,
+          name: true,
+          avatarId: true,
+          id: true,
+          role: true,
+        },
+      });
+      res.json({ message: "Metadata updated", user });
+    } catch (e) {
+      console.log("error");
+      res.status(400).json({ message: "Internal server error" });
+    }
+});

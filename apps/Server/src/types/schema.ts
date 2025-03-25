@@ -12,7 +12,7 @@ export const LoginSchema = z.object({
     password: z.string().min(8),
 });
 
-export const UpdateMetaDataSchema = z.object({
+export const UpdateAvatar = z.object({
     avatarId: z.string()
 });
 
@@ -69,3 +69,8 @@ declare global {
       }
     }
 }
+
+export const UpdateMetaDataSchema = z.object({
+    avatarId: z.string(),
+    name: z.string(),
+});
