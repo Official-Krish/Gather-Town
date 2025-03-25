@@ -35,7 +35,7 @@ SpaceRouter.post("/", userMiddleware, async (req, res) => {
         })
         if (!map) {
             res.status(400).json({message: "Map not found"})
-            return
+            return;
         }
         let space = await client.$transaction(async () => {
             const space = await client.space.create({
@@ -59,12 +59,11 @@ SpaceRouter.post("/", userMiddleware, async (req, res) => {
             return space;
     
         })
-        res.json({spaceId: space.id})
+        res.json({spaceId: space.id, space: space})
     }
 });
 
 SpaceRouter.delete("/element", userMiddleware, async (req, res) => {
-    console.log("here")
     const parsedData = deleteElementSchema.safeParse(req.body);
     if (!parsedData.success) {
         res.status(400).json({ error: "Invalid data" });
@@ -109,6 +108,13 @@ SpaceRouter.delete("/:spaceId", userMiddleware, async (req, res) => {
         res.status(401).json({msg: "Unauthorized"})
         return
     }
+
+    await client.spaceElements.deleteMany({
+        where: {
+            spaceId: req.params.spaceId
+        }
+    });
+    
     await client.space.delete({
         where: {
             id: req.params.spaceId
