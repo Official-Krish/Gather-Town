@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { AddElementSchema, CreateElementSchema, CreateSpaceSchema, deleteElementSchema } from "../types/schema";
 import client from "@repo/db/client";
-import { userMiddleware } from "../utils/middleware/user";
+import { userMiddleware } from "../middleware/user";
 
 export const SpaceRouter = Router(); 
 

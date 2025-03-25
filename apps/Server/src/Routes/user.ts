@@ -5,7 +5,7 @@ import { Router } from "express";
 import {hash, compare} from "../scrypt";
 import jwt from 'jsonwebtoken';
 import { LoginSchema, SignupSchema, UpdateAvatar, UpdateMetaDataSchema,  } from '../types/schema';
-import { userMiddleware } from '../utils/middleware/user';
+import { userMiddleware } from '../middleware/user';
 import client from "@repo/db/client";
 
 export const userRouter = Router();

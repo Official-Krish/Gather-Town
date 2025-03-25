@@ -14,12 +14,10 @@
   "description": "",
   "dependencies": {
     "@repo/db": "*",
-    "colyseus": "^0.15.17",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "express": "^4.21.1",
     "json-web-token": "^3.2.0",
-    "kafkajs": "^2.2.4",
     "zod": "^3.23.8"
   },
   "devDependencies": {
