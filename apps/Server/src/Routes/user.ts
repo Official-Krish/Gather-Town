@@ -38,6 +38,7 @@ userRouter.post("/signup", async (req, res) => {
                     username: parsedData.data.username,
                     password: hashedPassword,
                     role: parsedData.data.role,
+                    avatarId: parsedData.data.AvatarId ?? "",
                 }
             });
 
@@ -48,9 +49,8 @@ userRouter.post("/signup", async (req, res) => {
                 },
                 JWT_SECRET
             );
-
-            res.cookie('token', token);
-            res.status(200).json({ msg: "User created successfully" , userId : user.id});
+            res.cookie('token', token, { httpOnly: true });
+            res.status(200).json({ msg: "User created successfully" , token : token , userId : user.id});
         } catch(error){
             res.status(500).json({ msg: "Internal server error" });
         }
@@ -90,7 +90,7 @@ userRouter.post("/signin", async (req, res) => {
                     JWT_SECRET
                 );
 
-                res.cookie('token', token);
+                res.cookie('token', token, { httpOnly: true });
                 res.status(200).json({ msg : "login successful" , token : token , userId : user.id});
             }
         }catch(error){

@@ -1,2 +1,4 @@
 .env
 dist
+tsconfig.app.tsbuildinfo
+tsconfig.node.tsbuildinfo
