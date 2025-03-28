@@ -13,6 +13,12 @@ export default {
   			sm: 'calc(var(--radius) - 4px)'
   		},
   		colors: {
+        metaverse: {
+          'dark-blue': '#0A0F1C',
+          'text': '#E2E8F0',
+          'purple': '#8B5CF6',
+          'blue': '#3B82F6'
+        },
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
   			card: {

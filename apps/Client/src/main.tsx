@@ -3,7 +3,7 @@ import App from './App.tsx'
 import './index.css'
 import { BrowserRouter } from 'react-router-dom'
 import Appbar from './components/Appbar.tsx'
-import { Footer } from './components/footer.tsx'
+import Footer from './components/footer.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
