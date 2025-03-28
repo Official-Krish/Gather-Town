@@ -120,12 +120,12 @@ const SignUp = () => {
             <div className={`transition-all duration-700 delay-200 ${isLoaded ? 'opacity-100' : 'opacity-0 translate-y-10'}`}>
               <label className="text-sm text-metaverse-text/70 mb-1 block">Full Name</label>
               <div className="relative">
-                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black h-4 w-4" />
+                <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-metaverse-text/70 h-4 w-4" />
                 <Input
                   type="text"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  className="pl-10 bg-metaverse-midnight/50 border-metaverse-text/10 focus:border-metaverse-accent/50 text-black"
+                  className="pl-10 bg-metaverse-midnight/50 border-metaverse-text/10 focus:border-metaverse-accent/50 text-metaverse-text/70"
                   placeholder="Enter your name"
                   required
                 />
@@ -135,12 +135,12 @@ const SignUp = () => {
             <div className={`transition-all duration-700 delay-300 ${isLoaded ? 'opacity-100' : 'opacity-0 translate-y-10'}`}>
               <label className="text-sm text-metaverse-text/70 mb-1 block">Username</label>
               <div className="relative">
-                <UserCircle className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black/40 h-4 w-4" />
+                <UserCircle className="absolute left-3 top-1/2 transform -translate-y-1/2 text-metaverse-text/70/40 h-4 w-4" />
                 <Input
                   type="text"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
-                  className="pl-10 bg-metaverse-midnight/50 border-metaverse-text/10 focus:border-metaverse-accent/50 text-black"
+                  className="pl-10 bg-metaverse-midnight/50 border-metaverse-text/10 focus:border-metaverse-accent/50 text-metaverse-text/70"
                   placeholder="Choose a username"
                   required
                 />
@@ -150,12 +150,12 @@ const SignUp = () => {
             <div className={`transition-all duration-700 delay-400 ${isLoaded ? 'opacity-100' : 'opacity-0 translate-y-10'}`}>
               <label className="text-sm text-metaverse-text/70 mb-1 block">Password</label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black h-4 w-4" />
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-metaverse-text/70 h-4 w-4" />
                 <Input
                   type={showPassword ? "text" : "password"}
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-10 pr-10 bg-metaverse-midnight/50 border-metaverse-text/10 focus:border-metaverse-accent/50 text-black"
+                  className="pl-10 pr-10 bg-metaverse-midnight/50 border-metaverse-text/10 focus:border-metaverse-accent/50 text-metaverse-text/70"
                   placeholder="Create a password"
                   required
                 />
@@ -164,7 +164,7 @@ const SignUp = () => {
                   onClick={() => setShowPassword(prev => !prev)}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-metaverse-text/40 hover:text-metaverse-text/70 transition-colors"
                 >
-                  {showPassword ? <EyeOff className="h-4 w-4 text-black" /> : <Eye className="h-4 w-4 text-black" />}
+                  {showPassword ? <EyeOff className="h-4 w-4 text-metaverse-text/70" /> : <Eye className="h-4 w-4 text-metaverse-text/70" />}
                 </button>
               </div>
             </div>

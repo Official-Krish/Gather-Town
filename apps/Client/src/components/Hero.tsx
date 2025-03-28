@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { MessageSquare, Video, Users } from "lucide-react";
+import { MessageSquare, Video } from "lucide-react";
 import { Button } from "./ui/button";
 
 const HeroSection = () => {
@@ -54,55 +54,12 @@ const HeroSection = () => {
         {/* Hero Image/Visual */}
         <div className={`lg:w-1/2 relative transition-all duration-1000 delay-300 ${isLoaded ? 'opacity-100' : 'opacity-0 translate-x-10'}`}>
           <div className="relative">
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-metaverse-purple to-metaverse-blue rounded-xl blur opacity-30 animate-pulse-soft"></div>
-            <div className="glass-card rounded-xl p-4 relative">
               <div className="bg-metaverse-midnight/80 rounded-lg overflow-hidden">
                 <div className="aspect-video w-full h-auto relative">
-                  {/* Virtual Office Mockup */}
                   <div className="absolute inset-0 bg-gradient-to-br from-metaverse-midnight to-metaverse-dark-blue rounded-lg">
-                    <div className="absolute top-4 left-4 right-4 h-8 bg-metaverse-midnight/80 rounded-md flex items-center px-3">
-                      <div className="flex space-x-2">
-                        <div className="w-2 h-2 rounded-full bg-red-500"></div>
-                        <div className="w-2 h-2 rounded-full bg-yellow-500"></div>
-                        <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                      </div>
-                      <div className="ml-4 text-xs text-metaverse-text/70">MetaverseConvene</div>
-                    </div>
-                    
-                    {/* Virtual Space Layout Representation */}
-                    <div className="absolute top-16 bottom-4 left-4 right-4 grid grid-cols-3 gap-2">
-                      {/* Meeting Room */}
-                      <div className="col-span-2 bg-gradient-to-br from-metaverse-purple/10 to-metaverse-blue/5 rounded-md border border-metaverse-purple/20 p-2 flex flex-col">
-                        <div className="text-xs text-metaverse-accent mb-1 text-left">Meeting Room</div>
-                        <div className="flex-1 flex flex-wrap gap-1 items-center justify-center">
-                          {[1, 2, 3, 4].map((i) => (
-                            <div key={i} className="w-6 h-6 rounded-full bg-metaverse-purple/30 flex items-center justify-center">
-                              <Users size={12} className="text-metaverse-accent" />
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                      
-                      {/* Chat Area */}
-                      <div className="bg-gradient-to-br from-metaverse-blue/10 to-metaverse-accent/5 rounded-md border border-metaverse-blue/20 p-2 flex flex-col">
-                        <div className="text-xs text-metaverse-accent mb-1 text-left">Chat</div>
-                        <div className="flex-1 flex flex-col items-start justify-end">
-                          <div className="w-full h-1 bg-white/10 rounded mb-1"></div>
-                          <div className="w-3/4 h-1 bg-white/10 rounded mb-1"></div>
-                          <div className="w-full h-1 bg-white/10 rounded"></div>
-                        </div>
-                      </div>
-                      
-                      {/* Common Area */}
-                      <div className="col-span-3 bg-gradient-to-br from-metaverse-accent/10 to-metaverse-purple/5 rounded-md border border-metaverse-accent/20 p-2 flex items-center justify-around h-16">
-                        <MessageSquare size={14} className="text-metaverse-text/70" />
-                        <Video size={14} className="text-metaverse-text/70" />
-                        <Users size={14} className="text-metaverse-text/70" />
-                      </div>
-                    </div>
+                    <video src="https://cdn.vidzflow.com/v/h3yy6rTnJQ_720p_1691443174.mp4" autoPlay loop muted className=" w-full h-full object-cover"></video>
                   </div>
                 </div>
-              </div>
             </div>
             
             {/* Floating Indicators */}

@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "./ui/button";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
 export const Appbar = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,7 +27,13 @@ export const Appbar = () => {
     >
       <div className="container px-4 mx-auto flex justify-between items-center">
         <div className="flex items-center">
-          <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-metaverse-purple to-metaverse-accent bg-clip-text text-transparent">
+          <h1 className="text-xl md:text-2xl font-bold bg-gradient-to-r from-metaverse-purple to-metaverse-accent bg-clip-text text-transparent cursor-pointer" onClick={() => {
+              if (window.location.pathname !== "/") {
+                navigate("/");
+              } else {
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }
+            }}>
             MetaverseConvene
           </h1>
         </div>
@@ -41,11 +49,20 @@ export const Appbar = () => {
           <a href="#pricing" className="text-metaverse-text/80 hover:text-metaverse-accent transition-colors">
             Pricing
           </a>
-          <Link to="/signup">
+          {Cookies.get("token") ? (
+            <Button className="bg-gradient-to-r from-metaverse-purple to-metaverse-blue text-white hover:shadow-lg hover:shadow-metaverse-purple/20 transition-all" onClick={() => {
+                Cookies.remove("token")
+                window.location.reload();
+              }}>
+              Logout
+            </Button>
+          ) : (
+            <Link to="/signup">
               <Button className="bg-gradient-to-r from-metaverse-purple to-metaverse-blue text-white hover:shadow-lg hover:shadow-metaverse-purple/20 transition-all">
                 Get Started
               </Button>
-          </Link>
+            </Link>
+          )}
         </div>
 
         {/* Mobile Menu Button */}
