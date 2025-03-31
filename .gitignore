@@ -1,2 +1,9 @@
 node_modules
 .npmrc
+.turbo
+.yarn
+dist    
+tsconfig.app.tsbuildinfo
+tsconfig.node.tsbuildinfo
+.qodo
+

@@ -1,5 +1,5 @@
 {
-  "name": "Gather-Town",
+  "name": "gather-town",
   "private": true,
   "scripts": {
     "build": "turbo build",
@@ -17,7 +17,6 @@
   },
   "packageManager": "yarn@1.22.21",
   "workspaces": [
-    "apps/*",
-    "packages/*"
+    "apps/*"
   ]
 }

@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Eye, EyeOff, ArrowRight, Mail, Lock } from "lucide-react";
 import axios from "axios";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
 import Cookies from "js-cookie";
+import { Input } from "../components/ui/input";
+import { Button } from "../components/ui/button";
 
 const SignIn = () => {
   const [showPassword, setShowPassword] = useState(false);

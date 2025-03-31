@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { Eye, EyeOff, ArrowRight, User, Lock, UserCircle } from "lucide-react";
 import axios from "axios";
-import { Input } from "./ui/input";
-import { Button } from "./ui/button";
+import { Input } from "../components/ui/input";
+import { Button } from "../components/ui/button";
 import Cookies from "js-cookie";
 
 // Assuming this will be set up in a config file
