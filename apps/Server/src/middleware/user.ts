@@ -6,7 +6,8 @@ import { NextFunction, Request, Response } from "express";
 
 export const userMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const header = req.headers["authorization"];
-    const token = header?.split(" ")[1];
+    // const token = header?.split(" ")[1];
+    const token = header;
     const JWT_PASSWORD = process.env.JWT_SECRET || "secret";
     
     if (!token) {

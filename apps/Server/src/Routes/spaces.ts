@@ -19,6 +19,7 @@ SpaceRouter.post("/", userMiddleware, async (req, res) => {
                 width: parseInt(parsedData.data.dimensions.split("x")[0]),
                 height: parseInt(parsedData.data.dimensions.split("x")[1]),
                 creatorId: req.userId as string,
+                thumbnail: parsedData.data.thumbnail,
             }
         });
         res.json({msg: "Space created successfully", spaceId: space.id});
@@ -44,6 +45,7 @@ SpaceRouter.post("/", userMiddleware, async (req, res) => {
                     width: map.width,
                     height: map.height,
                     creatorId: req.userId!,
+                    thumbnail: parsedData.data.thumbnail,
                 }
             });
     
