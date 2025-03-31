@@ -4,11 +4,14 @@ import './index.css'
 import { BrowserRouter } from 'react-router-dom'
 import Appbar from './components/Appbar.tsx'
 import Footer from './components/footer.tsx'
+import { RecoilRoot } from 'recoil'
 
 createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
-    <Appbar/>
-    <App />
-    <Footer/>
+    <RecoilRoot>
+      <Appbar/>
+      <App />
+      <Footer/>
+    </RecoilRoot>
   </BrowserRouter>
 )

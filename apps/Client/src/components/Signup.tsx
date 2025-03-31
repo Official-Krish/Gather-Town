@@ -21,7 +21,7 @@ const SignUp = () => {
   const [name, setName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [type, setType] = useState<"User" | "Admin">("User");
+  const [type, setType] = useState<"User" | "Admin">("Admin");
   const [avatarId, setAvatarId] = useState<string | number | null>(null);
   const [avatars, setAvatars] = useState<Avatar[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
