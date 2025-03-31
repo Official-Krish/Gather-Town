@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "tsc -b"
+    "build": "tsc -b",
+    "db:seed": "yarn prisma db seed"
+  },
+  "prisma": {
+    "seed": "yarn ts-node --compiler-options {\"module\":\"CommonJS\"} prisma/seed.ts"
   },
   "exports": {
     "./client": "./src/index.ts"
