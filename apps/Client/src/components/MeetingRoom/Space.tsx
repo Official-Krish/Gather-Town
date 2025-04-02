@@ -1150,7 +1150,7 @@ const Space = () => {
   };
 
   return (
-    <div className="flex flex-col justify-between items-center h-screen bg-slate-900 p-6 pb-0 text-white">
+    <div className="flex flex-col justify-between items-center h-screen bg-slate-900 pb-0 text-white mt-20">
       {/* top div for showing videos for remote user  */}
       {spaceDetails && (
         <Topbar
@@ -1284,11 +1284,21 @@ const Space = () => {
         </div>
       )}
 
+
+      <Bottom
+        user={user!}
+        toggleLocalAudio={toggleLocalAudio}
+        localMediaState={localMediaState}
+        toggleLocalVideo={toggleLocalVideo}
+        handleshowChat={handleshowChat}
+      />
+
+
       {/* game grid and chat div */}
-      <div className="flex w-full h-5/6 gap-6 justify-between items-center">
+      <div className="flex w-full h-full gap-6 justify-between">
         {/* Game Grid */}
         <div
-          className="w-[80%] h-full mr-4 overflow-auto  rounded-lg"
+          className="w-[80%] h-full mr-4 overflow-auto rounded-lg"
           tabIndex={0}
           style={{ outline: "none" }}
         >
@@ -1415,25 +1425,18 @@ const Space = () => {
         {/* Chat Interface - Right Side */}
         {/* Chat Interface - Right Side */}
         {showChat ? (
-          <div className="w-[35%] h-full">
-            <div className="w-[100%] h-[100%] bg-gradient-to-br from-[#545c8f] to-[#3e4469] rounded-xl flex flex-col shadow-xl border border-[#6c75b5]/30 overflow-hidden">
+          <div className="w-[35%] h-[80%]">
+            <div className="w-[100%] h-[100%] bg-slate-900 rounded-xl flex flex-col shadow-xl border border-[#6c75b5]/30 overflow-hidden ">
               {/* Chat Header */}
-              <div className="bg-gradient-to-r from-[#454c77] to-[#383f66] p-4 border-b border-[#6c75b5]/50 shadow-sm">
+              <div className="bg-slate-900 p-4 border-b border-[#6c75b5]/50 shadow-sm">
                 <h1 className="text-center text-xl font-bold text-white tracking-wide">
-                  <span className="mr-2">✨</span>
-                  All Chat
-                  <span className="ml-2">✨</span>
+                    Chat Room
                 </h1>
               </div>
 
               {/* Messages Area with subtle background pattern */}
               <div
-                className="flex-grow overflow-y-auto p-4 space-y-4 bg-[#4a5180]/90"
-                style={{
-                  backgroundImage:
-                    "radial-gradient(circle at 20px 20px, rgba(108, 117, 181, 0.1) 4px, transparent 0)",
-                  backgroundSize: "40px 40px",
-                }}
+                className="flex-grow overflow-y-auto p-4 space-y-4 bg-slate-900"
               >
                 {chatMessages.map((msg, index) => {
                   const isSelf =
@@ -1498,7 +1501,7 @@ const Space = () => {
               </div>
 
               {/* Input Form */}
-              <div className="p-4 border-t border-[#6c75b5]/30 bg-gradient-to-r from-[#454c77] to-[#383f66]">
+              <div className="p-4 border-t border-[#6c75b5]/30 bg-slate-900">
                 <form onSubmit={handleChatSubmit} className="relative">
                   <input
                     type="text"
@@ -1554,13 +1557,6 @@ const Space = () => {
       )}
 
       {/* bottom div for user information */}
-      <Bottom
-        user={user!}
-        toggleLocalAudio={toggleLocalAudio}
-        localMediaState={localMediaState}
-        toggleLocalVideo={toggleLocalVideo}
-        handleshowChat={handleshowChat}
-      />
     </div>
   );
 };
